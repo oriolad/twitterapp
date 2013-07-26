@@ -30,7 +30,7 @@ def userfound(request):
 		return render(request, 'usersearch.html', {'found': False, 'searchedUser': "NONE", 'foundUser': "NONE", 'result': "User not found."}, context_instance=RequestContext(request))
 	#user not logged in
 	else:
-		return render(request, 'index.html', {'result': "You did not login yet."}, context_instance=RequestContext(request))
+		return HttpResponseRedirect("/")
 	
 def twitter(request):
 	if 'currentUser' in request.session:
@@ -62,7 +62,7 @@ def twitter(request):
 		else:
 			return render(request, 'twitter.html', {'result': "", 'currentUser': currentUser, 'myTweets':myTweets, 'theirTweets': theirTweetList}, context_instance=RequestContext(request))
 	else:
-		return render(request, 'index.html', {'result': "You did not login yet."}, context_instance=RequestContext(request))
+		return HttpResponseRedirect("/")
 
 def usermanagement(request):
 	if 'currentUser' in request.session:
@@ -78,7 +78,7 @@ def usermanagement(request):
 		else:
 			return render(request, 'usermanagement.html', {'delete': False, 'usersFollowedList': getFollowedUsers}, context_instance=RequestContext(request))
 	else:
-		return render(request, 'index.html', {'result': "You did not login yet."}, context_instance=RequestContext(request))
+		return HttpResponseRedirect("/")
 
 def index(request):
 	#if there is a login request
@@ -98,22 +98,22 @@ def index(request):
 	#if there is a register request
 	if 'registerForm' in request.POST:
 		username = request.POST['username']
-		email = request.POST['email']
 		password = request.POST['password']
 		if len(username) < 3:
 			return render(request, 'index.html', {'result': "Your username must be greater than 3 characters."}, context_instance=RequestContext(request))
 		elif len(password) < 3:
 			return render(request, 'index.html', {'result': "Your password must be greater than 3 characters."}, context_instance=RequestContext(request))
-		elif "@" not in email:
-			return render(request, 'index.html', {'result': "Please enter a valid email address."}, context_instance=RequestContext(request))
 		else:
-			u = User.objects.create_user(username=username,email=email,password=password)
-			u.save()
-			user = authenticate(username=username, password=password)
-			auth_login(request, user)
-			request.session['currentUser'] = user
-			#redirect to success page
-			return HttpResponseRedirect("/twitter/")
+			try:
+				u = User.objects.create_user(username=username,password=password)
+				u.save()
+				user = authenticate(username=username, password=password)
+				auth_login(request, user)
+				request.session['currentUser'] = user
+				#redirect to success page
+				return HttpResponseRedirect("/twitter/")
+			except:
+				return render(request, 'index.html', {'result': "User already exists."}, context_instance=RequestContext(request))
 	#else display all forms
 	else:
 		return render(request, 'index.html', {'result': ""}, context_instance=RequestContext(request))
@@ -151,4 +151,4 @@ def usersearch(request):
 		return render(request, 'usersearch.html', {'found': False, 'searchedUser': "NONE", 'foundUser': "NONE", 'result': "User not found."}, context_instance=RequestContext(request))
 	else:
 		#user not logged in
-		return render(request, 'index.html', {'result': "You did not login yet."}, context_instance=RequestContext(request))
+		return HttpResponseRedirect("/")

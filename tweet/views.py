@@ -94,7 +94,7 @@ def index(request):
 			return HttpResponseRedirect("/twitter/")
 		else:
 			#error page
-			return HttpResponse("Error logging in.")
+			return render(request, 'index.html', {'result': "Wrong username or password. Please try again."}, context_instance=RequestContext(request))
 	#if there is a register request
 	if 'registerForm' in request.POST:
 		username = request.POST['username']

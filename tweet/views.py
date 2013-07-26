@@ -27,7 +27,7 @@ def userfound(request):
 			return render(request, 'userfound.html', {'created':created, 'searchedUser': searchedUser}, context_instance=RequestContext(request))
 	#user logged in, did not search
 	elif 'currentUser' in request.session and 'searchedUser' not in request.session:
-		return render(request, 'usersearch.html', {'found': False, 'searchedUser': "NONE", 'foundUser': "NONE", 'test_action': "User not found."}, context_instance=RequestContext(request))
+		return render(request, 'usersearch.html', {'found': False, 'searchedUser': "NONE", 'foundUser': "NONE", 'result': "User not found."}, context_instance=RequestContext(request))
 	#user not logged in
 	else:
 		return render(request, 'index.html', {'result': "You did not login yet."}, context_instance=RequestContext(request))
@@ -52,7 +52,7 @@ def twitter(request):
 		if 'incomingTweet' in request.POST:
 			newTweet = request.POST['incomingTweet']
 			#process tweet_post, then save in database
-			if len(newTweet) >= 140 and len(newTweet) < 1:
+			if len(newTweet) <= 140 and len(newTweet) > 1:
 				addTweet = Tweet(message=newTweet,username=currentUser)
 				addTweet.save()
 				#add new tweet
@@ -67,6 +67,7 @@ def twitter(request):
 def usermanagement(request):
 	if 'currentUser' in request.session:
 		currentUser = request.session['currentUser']
+
 		getFollowedUsers = userFollowing.objects.filter(username=currentUser)
 
 		if 'unfollow' in request.POST:
@@ -130,8 +131,8 @@ def usersearch(request):
 		foundUser = ""
 
 		if searchedUser == currentUser.get_username():
-			return render(request, 'usersearch.html', {'found': False, 'searchedUser': searchedUser, 'foundUser': "NONE", 'test_action': "You cannot add yourself."}, context_instance=RequestContext(request))
-	
+			return render(request, 'usersearch.html', {'found': False, 'searchedUser': searchedUser, 'foundUser': "NONE", 'result': "You cannot add yourself."}, context_instance=RequestContext(request))
+
 		try:
 			foundUser = User.objects.get(username=searchedUser)
 			found = True
@@ -142,12 +143,12 @@ def usersearch(request):
 			if 'followForm' in request.POST:
 				return HttpResponseRedirect("/userfound/")
 			else:
-				return render(request, 'usersearch.html', {'found': True, 'searchedUser': searchedUser, 'foundUser': foundUser, 'test_action': "User found."}, context_instance=RequestContext(request))                
+				return render(request, 'usersearch.html', {'found': found, 'searchedUser': searchedUser, 'foundUser': foundUser, 'result': "User found."}, context_instance=RequestContext(request))                
 		else:
-			return render(request, 'usersearch.html', {'found': False, 'searchedUser': searchedUser, 'foundUser': foundUser, 'test_action': "User not found."}, context_instance=RequestContext(request))	
+			return render(request, 'usersearch.html', {'found': found, 'searchedUser': searchedUser, 'foundUser': foundUser, 'result': "User not found."}, context_instance=RequestContext(request))	
 	elif 'searchedUser' not in request.session and 'currentUser' in request.session:
 		#user has logged in but not searched for anything
-		return render(request, 'usersearch.html', {'found': False, 'searchedUser': "NONE", 'foundUser': "NONE", 'test_action': "User not found."}, context_instance=RequestContext(request))
+		return render(request, 'usersearch.html', {'found': False, 'searchedUser': "NONE", 'foundUser': "NONE", 'result': "User not found."}, context_instance=RequestContext(request))
 	else:
 		#user not logged in
 		return render(request, 'index.html', {'result': "You did not login yet."}, context_instance=RequestContext(request))

@@ -1,0 +1,29 @@
+{% block nav %}
+
+
+<table class="table">
+  <tr>
+    <td>
+      Welcome, <b>{{ currentUser.username }}</b>,
+      see who you are <a href="/usermanagement/">currently following</a>.
+    </td>
+
+    <td>
+      <form action="" method="post" class="form-inline"> {% csrf_token %}
+        <input type="text" name="incomingTweet" value="" placeholder="Enter your tweet here.">
+        <input type="submit" value="Submit">
+      </form>
+
+    </td>
+
+    <td>
+      <form action="" method="post" class="form-inline"> {% csrf_token %}
+        <input type="text" name="searchUser" value="" placeholder="Search for a user here.">
+        <input type="submit" value="Search">
+      </form>
+    </td>
+
+  </tr>
+</table>
+
+{% endblock %}

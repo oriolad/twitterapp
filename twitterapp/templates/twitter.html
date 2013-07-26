@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Tweets {% endblock %}
+
+{% block nav %}
+<table class="table">
+  <tr>
+    <td>
+    	<div class="btn-group dropdown">
+    		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    			{{ currentUser.username }}
+    			<span class="caret"></span>
+    		</a>
+    		<ul class="dropdown-menu">
+    			<!-- dropdown menu links -->
+    			<li><a href="/usermanagement/">Currently Following</a></li>
+    			<li><a href="/logout/">Logout</a></li>
+    		</ul>
+    	</div>
+    </td>
+
+    <td>
+      <form action="" method="post" class="form-inline"> {% csrf_token %}
+        <input type="text" name="incomingTweet" value="" placeholder="Enter your tweet here.">
+        <input type="submit" value="Submit">
+      </form>
+
+    </td>
+
+    <td>
+      <form action="" method="post" class="form-inline"> {% csrf_token %}
+        <input type="text" name="searchUser" value="" placeholder="Search for a user here.">
+        <input type="submit" value="Search">
+      </form>
+    </td>
+
+  </tr>
+</table>
+{% endblock %}
+
+{% block content %}
+
+<table class="table table-striped">
+	<tr>
+		<td colspan="3"><h1>Your Tweets</h1></td>
+	</tr>
+	<tr>
+		<td><b>Tweet</b></td>
+		<td><b>Posted On</b></td>
+		<td><b>User</b></td>
+	</tr>
+
+	{% for tweet in myTweets reversed %}
+	<tr>
+		<td>{{tweet.message}}</td>
+		<td>{{tweet.created|date}}</td>
+		<td>{{tweet.username}}</td>
+	</tr>
+	{% endfor %}
+
+	<tr>
+		<td colspan="3"><h1>Following</h1></td>
+	</tr>
+	<tr>
+		<td><b>Tweet</b></td>
+		<td><b>Posted On</b></td>
+		<td><b>User</b></td>
+	</tr>
+
+	{% for tweet in theirTweets reversed %}
+	<tr>
+		<td>{{tweet.message}}</td>
+		<td>{{tweet.created|date}}</td>
+		<td>{{tweet.username}}</td>
+	</tr>
+	{% endfor %}
+
+
+</table>
+
+{% endblock %}
+

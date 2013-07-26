@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block title %} User Search {% endblock %}
+
+{% block content %}
+
+<table>
+
+{% if created %}
+
+<tr>
+	<td>
+You are now following <b>{{ searchedUser }}</b>. Go back to the <a href="/twitter/">main Twitter page</a>.
+</td>
+</tr>
+
+{% else %}
+
+<tr>
+	<td>
+You are already following <b>{{ searchedUser }}</b>. Go back to the <a href="/twitter/">main Twitter page</a>.
+	</td>
+</tr>
+
+{% endif %}
+
+</table>
+
+
+
+{% endblock %}
+

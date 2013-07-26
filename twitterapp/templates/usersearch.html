@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block title %} User Search {% endblock %}
+
+{% block content %}
+
+<table class="table">
+	<tr>
+		<td>You searched for <b>{{ searchedUser }}</b>. Go back to the <a href="/twitter/">main Twitter page</a>.</td>
+	</tr>
+	<tr>
+		{% if found %}
+		<td>
+			<form action="" method="post"> {% csrf_token %}
+				Result: <b>{{ foundUser.username }}</b> <input type="submit" value="Follow" name="followForm">
+			</form>
+		</td>
+		{% else %}
+		<td>
+			Result: {{ test_action }}
+		</td>
+
+		{% endif %}
+
+	</tr>
+</table>
+
+
+
+
+
+
+
+{% endblock %}
+

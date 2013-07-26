@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block title %} User Management {% endblock %}
+
+{% block content %}
+
+<table class="table">
+
+	<tr>
+		<td colspan="2">These are the users you are following:</td>
+	</tr>
+
+{% for u in usersFollowedList %}
+
+	<tr>
+		<td>{{ u.userFollowed }}</td>
+		<td>
+			<form action="" method="post"> {% csrf_token %}
+			<input type="hidden" name="userSelected" value={{ u.userFollowed }}>
+	 		<input type="submit" value="Unfollow" name="unfollow">
+			</form>
+		</td>
+	</tr>
+
+{% endfor %}
+
+</table>
+
+
+
+{% endblock %}
+

@@ -44,7 +44,6 @@ def twitter(request):
 			for t in followedTweets:
 				theirTweetList.insert(0, t) 
 
-
 		if 'searchUser' in request.POST:
 			searchedUser = request.POST['searchUser']
 			request.session['searchedUser'] = searchedUser
@@ -53,15 +52,15 @@ def twitter(request):
 		if 'incomingTweet' in request.POST:
 			newTweet = request.POST['incomingTweet']
 			#process tweet_post, then save in database
-			if len(newTweet) <= 140:
+			if len(newTweet) >= 140 and len(newTweet) < 1:
 				addTweet = Tweet(message=newTweet,username=currentUser)
 				addTweet.save()
 				#add new tweet
-				return render(request, 'twitter.html', {'currentUser': currentUser, 'myTweets':myTweets, 'theirTweets': theirTweetList}, context_instance=RequestContext(request))
+				return render(request, 'twitter.html', {'result': "", 'currentUser': currentUser, 'myTweets':myTweets, 'theirTweets': theirTweetList}, context_instance=RequestContext(request))
 			else:
-				#needs to be less than 140 char
+				return render(request, 'twitter.html', {'result': "Your tweet needs to be between 1 to 140 characters.", 'currentUser': currentUser, 'myTweets': myTweets, 'theirTweets': theirTweetList}, context_instance=RequestContext(request))
 		else:
-			return render(request, 'twitter.html', {'currentUser': currentUser, 'myTweets':myTweets, 'theirTweets': theirTweetList}, context_instance=RequestContext(request))
+			return render(request, 'twitter.html', {'result': "", 'currentUser': currentUser, 'myTweets':myTweets, 'theirTweets': theirTweetList}, context_instance=RequestContext(request))
 	else:
 		return render(request, 'index.html', {'result': "You did not login yet."}, context_instance=RequestContext(request))
 

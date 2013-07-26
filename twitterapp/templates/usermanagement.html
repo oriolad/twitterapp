@@ -8,22 +8,35 @@
 <table class="table">
 
 	<tr>
-		<td colspan="2">These are the users you are following:</td>
-	</tr>
-
-{% for u in usersFollowedList %}
-
-	<tr>
-		<td>{{ u.userFollowed }}</td>
-		<td>
-			<form action="" method="post"> {% csrf_token %}
-			<input type="hidden" name="userSelected" value={{ u.userFollowed }}>
-	 		<input type="submit" value="Unfollow" name="unfollow">
-			</form>
+		<td colspan="2">
+			<h1>Currently Following:</h1>
 		</td>
 	</tr>
 
-{% endfor %}
+{% if usersFollowedList %}
+	{% for u in usersFollowedList %}
+
+		<tr>
+			<td>{{ u.userFollowed }}</td>
+			<td>
+				<form action="" method="post"> {% csrf_token %}
+				<input type="hidden" name="userSelected" value={{ u.userFollowed }}>
+		 		<input type="submit" value="Unfollow" name="unfollow">
+				</form>
+			</td>
+		</tr>
+
+	{% endfor %}
+{% else %}
+	
+	<tr>
+		<td colspan="2">You are not following anyone at the moment.</td>
+	</tr>
+{% endif %}
+
+	<tr>
+		<td colspan="2">Go back to the <a href="/twitter/">main Twitter page</a>.</td>
+	</tr>
 
 </table>
 
